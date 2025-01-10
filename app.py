@@ -27,7 +27,7 @@ async def annabelle(ctx):
 # Subcommand: /annabelle hello
 @annabelle.command()
 async def hello(ctx):
-    await ctx.send("Hello! I'm Annabelle. How can I help you today?")
+    #await ctx.send("Hello! I'm Annabelle. How can I help you today?")
     await ctx.reply("Hello! I'm Annabelle. How can I help you today?")
 
 # Run the bot
