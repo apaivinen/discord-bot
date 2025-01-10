@@ -31,7 +31,15 @@ async def hello(ctx):
     #await ctx.send("Hello! I'm Annabelle. How can I help you today?")
     await ctx.reply("Hello! I'm Annabelle. How can I help you today?")
 
-# Run the bot
-if __name__ == "__main__":
-    print("Starting the bot...")
+# Define a main function for gunicorn
+def main():
     asyncio.run(bot.start(TOKEN))
+
+# If running locally
+if __name__ == "__main__":
+    main()
+    
+# Run the bot
+#if __name__ == "__main__":
+#    print("Starting the bot...")
+#    asyncio.run(bot.start(TOKEN))
