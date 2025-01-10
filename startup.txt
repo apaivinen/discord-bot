@@ -1,1 +1,1 @@
-gunicorn --workers=1 --timeout 600 app:main
+python -m gunicorn --workers=1 --timeout 600 app:main
