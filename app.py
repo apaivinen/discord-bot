@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import os
+import asyncio
 
 print(f'Loading bot...')
 
@@ -33,4 +34,4 @@ async def hello(ctx):
 # Run the bot
 if __name__ == "__main__":
     print("Starting the bot...")
-    bot.run(TOKEN)
+    asyncio.run(bot.start(TOKEN))
