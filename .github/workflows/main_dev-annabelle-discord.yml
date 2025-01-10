@@ -22,6 +22,11 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install required system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc python3-dev libffi-dev
+
       - name: Create and start virtual environment
         run: |
           python -m venv venv
