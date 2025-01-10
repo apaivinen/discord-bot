@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import os
 
+print(f'Loading bot...')
+
 # Load bot token from environment variables
 TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 
