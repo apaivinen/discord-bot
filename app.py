@@ -21,12 +21,14 @@ async def on_ready():
 @bot.group()
 async def annabelle(ctx):
     if ctx.invoked_subcommand is None:
-        await ctx.send("Hi! You can use `/annabelle hello`.")
+        #await ctx.send("Hi! You can use `/annabelle hello`.")
+        await ctx.reply("Hi! You can use `/annabelle hello`.")
 
 # Subcommand: /annabelle hello
 @annabelle.command()
 async def hello(ctx):
     await ctx.send("Hello! I'm Annabelle. How can I help you today?")
+    await ctx.reply("Hello! I'm Annabelle. How can I help you today?")
 
 # Run the bot
 if __name__ == "__main__":
