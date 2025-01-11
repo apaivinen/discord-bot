@@ -39,8 +39,14 @@ async def on_message(message):
 
         # HTTP POST request to the specified endpoint
         url = "https://gamingbuddy-wiki-demo.swedencentral.inference.ml.azure.com/score"
+        api_key = os.getenv('API_AUTH_TOKEN')
+
+        if not api_key:
+            await message.reply(f"{message.author.mention}, API key is missing.")
+            return
+
         headers = {
-            "Authorization": f"Bearer {os.getenv('API_AUTH_TOKEN')}",
+            "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json"
         }
         data = {"question": cleaned_message}
