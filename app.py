@@ -3,7 +3,6 @@ from discord.ext import commands
 import os
 from fastapi import FastAPI
 import uvicorn
-import aiohttp
 
 # --- FastAPI web server ---
 app = FastAPI()
@@ -28,10 +27,6 @@ bot = commands.Bot(command_prefix="/", intents=intents)
 async def on_ready():
     print(f'Bot is online as {bot.user}')
 
-# Function to split text into chunks of 2000 characters or less
-def split_message(content, max_length=2000):
-    return [content[i:i + max_length] for i in range(0, len(content), max_length)]
-
 # --- Event: Respond when the bot is mentioned ---
 @bot.event
 async def on_message(message):
@@ -40,28 +35,15 @@ async def on_message(message):
         # Remove the bot mention from the message content
         cleaned_message = message.content.replace(f"<@{bot.user.id}>", "").strip()
 
-        # URL to query
-        url = "https://chatgpt.com/g/g-678275c1d07481918d518ffe6a87b791-phasmophobia-guide"
+        # List available commands
+        available_commands = """
+        **Available Commands:**
+        - `/annabelle hello` — Say hello to Annabelle
+        """
 
-        async with aiohttp.ClientSession() as session:
-            try:
-                async with session.get(url) as response:
-                    if response.status == 200:
-                        # Retrieve and decode the content
-                        page_content = await response.text()
-
-                        # Split the content into chunks of 2000 characters
-                        chunks = split_message(page_content)
-
-                        # Send each chunk as a separate message
-                        for chunk in chunks:
-                            await message.reply(chunk)
-                    else:
-                        # Handle non-200 status codes
-                        await message.reply(f"Sorry {message.author.mention}, I couldn't retrieve the page. Status code: {response.status}")
-            except Exception as e:
-                # Handle request errors
-                await message.reply(f"An error occurred: {str(e)}")
+        # Reply with a response including the cleaned message
+        response = f"Hello {message.author.mention}! You mentioned me with:\n> {cleaned_message}\n\n{available_commands}"
+        await message.reply(response)
 
     # Process other bot commands
     await bot.process_commands(message)
