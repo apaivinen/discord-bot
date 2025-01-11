@@ -38,7 +38,7 @@ async def on_message(message):
         cleaned_message = message.content.replace(f"<@{bot.user.id}>", "").strip()
 
         # HTTP POST request to the specified endpoint
-        url = {os.getenv('API_URL')}
+        url = f"{os.getenv('API_URL')}"
         headers = {
             "Authorization": f"Bearer {os.getenv('API_AUTH_TOKEN')}",
             "Content-Type": "application/json"
