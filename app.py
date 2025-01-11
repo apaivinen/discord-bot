@@ -17,7 +17,7 @@ print(f'Loading bot...')
 # Load bot token from environment variables
 TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 
-# Create a bot instance with command prefix '/' (can still be used for other commands)
+# Create a bot instance with command prefix '/'
 intents = discord.Intents.default()
 intents.message_content = True  # Enable message content intent
 bot = commands.Bot(command_prefix="/", intents=intents)
@@ -32,21 +32,34 @@ async def on_ready():
 async def on_message(message):
     # Check if the bot is mentioned and ignore messages from other bots
     if bot.user in message.mentions and not message.author.bot:
+        # Remove the bot mention from the message content
+        cleaned_message = message.content.replace(f"<@{bot.user.id}>", "").strip()
+
         # List available commands
         available_commands = """
         **Available Commands:**
-        - `hello` — Say hello to Annabelle
+        - `/annabelle hello` — Say hello to Annabelle
         """
-        # Reply to the user with the list of commands
-        await message.reply(
-            f"Hello {message.author.mention}! You mentioned me.\n{available_commands}"
-        )
 
-    # Allow the bot to process other commands
+        # Reply with a response including the cleaned message
+        response = f"Hello {message.author.mention}! You mentioned me with:\n> {cleaned_message}\n\n{available_commands}"
+        await message.reply(response)
+
+    # Process other bot commands
     await bot.process_commands(message)
 
-# --- Command: hello ---
-@bot.command()
+# --- Group Command: /annabelle ---
+@bot.group()
+async def annabelle(ctx):
+    if ctx.invoked_subcommand is None:
+        subcommands = [cmd.name for cmd in annabelle.commands]
+        subcommands_list = "\n".join(f"- `/annabelle {cmd}`" for cmd in subcommands)
+        await ctx.reply(
+            f"Hi! Here are the available `/annabelle` commands:\n{subcommands_list}"
+        )
+
+# --- Subcommand: /annabelle hello ---
+@annabelle.command()
 async def hello(ctx):
     await ctx.reply("Hello! I'm Annabelle. How can I help you today?")
 
@@ -56,7 +69,7 @@ if __name__ == "__main__":
     from threading import Thread
     server = Thread(target=lambda: uvicorn.run(app, host="0.0.0.0", port=8000))
     server.start()
-    
+
     # Start the Discord bot
     print("Starting the bot...")
     bot.run(TOKEN)
