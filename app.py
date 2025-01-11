@@ -38,7 +38,7 @@ async def on_message(message):
         cleaned_message = message.content.replace(f"<@{bot.user.id}>", "").strip()
 
         # HTTP POST request to the specified endpoint
-        url = "https://gamingbuddy-wiki-demo.swedencentral.inference.ml.azure.com/score"
+        url = os.getenv('API_URL')
         API_AUTH_TOKEN = os.getenv('API_AUTH_TOKEN')
 
         if not API_AUTH_TOKEN:
