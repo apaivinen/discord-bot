@@ -35,15 +35,24 @@ async def on_message(message):
         # Remove the bot mention from the message content
         cleaned_message = message.content.replace(f"<@{bot.user.id}>", "").strip()
 
-        # List available commands
-        available_commands = """
-        **Available Commands:**
-        - `/annabelle hello` — Say hello to Annabelle
-        """
+        # HTTP POST request to the specified endpoint
+        url = {os.getenv('API_URL')}
+        headers = {
+            "Authorization": f"Bearer {os.getenv('API_AUTH_TOKEN')}",
+            "Content-Type": "application/json"
+        }
+        data = {"question": cleaned_message}
 
-        # Reply with a response including the cleaned message
-        response = f"Hello {message.author.mention}! You mentioned me with:\n> {cleaned_message}\n\n{available_commands}"
-        await message.reply(response)
+        try:
+            response = requests.post(url, headers=headers, json=data)
+            response.raise_for_status()
+            result = response.json()
+            reply_content = result.get("answer", "I'm not sure how to respond to that.")
+        except requests.exceptions.RequestException as e:
+            reply_content = f"An error occurred: {str(e)}"
+
+        # Reply with the response from the API
+        await message.reply(f"{message.author.mention}, {reply_content}")
 
     # Process other bot commands
     await bot.process_commands(message)
