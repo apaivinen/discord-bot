@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 import os
-import asyncio
 
 print(f'Loading bot...')
 
@@ -31,15 +30,7 @@ async def hello(ctx):
     #await ctx.send("Hello! I'm Annabelle. How can I help you today?")
     await ctx.reply("Hello! I'm Annabelle. How can I help you today?")
 
-# Define a main function for gunicorn
-def main():
-    asyncio.run(bot.start(TOKEN))
-
-# If running locally
-if __name__ == "__main__":
-    main()
-    
 # Run the bot
-#if __name__ == "__main__":
-#    print("Starting the bot...")
-#    asyncio.run(bot.start(TOKEN))
+if __name__ == "__main__":
+    print("Starting the bot...")
+    bot.run(TOKEN)
