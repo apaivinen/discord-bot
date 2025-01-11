@@ -28,6 +28,10 @@ bot = commands.Bot(command_prefix="/", intents=intents)
 async def on_ready():
     print(f'Bot is online as {bot.user}')
 
+# Function to split text into chunks of 2000 characters or less
+def split_message(content, max_length=2000):
+    return [content[i:i + max_length] for i in range(0, len(content), max_length)]
+
 # --- Event: Respond when the bot is mentioned ---
 @bot.event
 async def on_message(message):
