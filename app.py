@@ -17,28 +17,40 @@ print(f'Loading bot...')
 # Load bot token from environment variables
 TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 
-# Create a bot instance with command prefix '/'
+# Create a bot instance with command prefix '/' (can still be used for other commands)
 intents = discord.Intents.default()
 intents.message_content = True  # Enable message content intent
 bot = commands.Bot(command_prefix="/", intents=intents)
 
-# Event: On bot ready
+# --- Event: On bot ready ---
 @bot.event
 async def on_ready():
     print(f'Bot is online as {bot.user}')
 
-# Create a /annabelle group command
-@bot.group()
-async def annabelle(ctx):
-    if ctx.invoked_subcommand is None:
-        await ctx.reply("Hi! You can use `/annabelle hello`.")
+# --- Event: Respond when the bot is mentioned ---
+@bot.event
+async def on_message(message):
+    # Check if the bot is mentioned and ignore messages from other bots
+    if bot.user in message.mentions and not message.author.bot:
+        # List available commands
+        available_commands = """
+        **Available Commands:**
+        - `hello` — Say hello to Annabelle
+        """
+        # Reply to the user with the list of commands
+        await message.reply(
+            f"Hello {message.author.mention}! You mentioned me.\n{available_commands}"
+        )
 
-# Subcommand: /annabelle hello
-@annabelle.command()
+    # Allow the bot to process other commands
+    await bot.process_commands(message)
+
+# --- Command: hello ---
+@bot.command()
 async def hello(ctx):
     await ctx.reply("Hello! I'm Annabelle. How can I help you today?")
 
-# Run the bot
+# --- Run the bot ---
 if __name__ == "__main__":
     # Start the FastAPI web server in a separate thread
     from threading import Thread
