@@ -3,7 +3,7 @@ from discord.ext import commands
 import os
 from fastapi import FastAPI
 import uvicorn
-
+import aiohttp
 
 # --- FastAPI web server ---
 app = FastAPI()
