@@ -41,14 +41,17 @@ async def on_message(message):
 
         async with aiohttp.ClientSession() as session:
             try:
-                async with session.get(url) as response:
+                 async with session.get(url) as response:
                     if response.status == 200:
                         # Retrieve and decode the content
                         page_content = await response.text()
 
-                        # Reply with the page content
-                        response_message = f"Hello {message.author.mention}!\nHere's the content from the URL you requested:\n\n{page_content[:2000]}"  # Limit to 2000 characters
-                        await message.reply(response_message)
+                        # Split the content into chunks of 2000 characters
+                        chunks = split_message(page_content)
+
+                        # Send each chunk as a separate message
+                        for chunk in chunks:
+                            await message.reply(chunk)
                     else:
                         # Handle non-200 status codes
                         await message.reply(f"Sorry {message.author.mention}, I couldn't retrieve the page. Status code: {response.status}")
