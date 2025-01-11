@@ -4,6 +4,7 @@ import os
 from fastapi import FastAPI
 import uvicorn
 
+
 # --- FastAPI web server ---
 app = FastAPI()
 
@@ -35,15 +36,25 @@ async def on_message(message):
         # Remove the bot mention from the message content
         cleaned_message = message.content.replace(f"<@{bot.user.id}>", "").strip()
 
-        # List available commands
-        available_commands = """
-        **Available Commands:**
-        - `/annabelle hello` — Say hello to Annabelle
-        """
+        # URL to query
+        url = "https://chatgpt.com/g/g-678275c1d07481918d518ffe6a87b791-phasmophobia-guide"
 
-        # Reply with a response including the cleaned message
-        response = f"Hello {message.author.mention}! You mentioned me with:\n> {cleaned_message}\n\n{available_commands}"
-        await message.reply(response)
+        async with aiohttp.ClientSession() as session:
+            try:
+                async with session.get(url) as response:
+                    if response.status == 200:
+                        # Retrieve and decode the content
+                        page_content = await response.text()
+
+                        # Reply with the page content
+                        response_message = f"Hello {message.author.mention}!\nHere's the content from the URL you requested:\n\n{page_content[:2000]}"  # Limit to 2000 characters
+                        await message.reply(response_message)
+                    else:
+                        # Handle non-200 status codes
+                        await message.reply(f"Sorry {message.author.mention}, I couldn't retrieve the page. Status code: {response.status}")
+            except Exception as e:
+                # Handle request errors
+                await message.reply(f"An error occurred: {str(e)}")
 
     # Process other bot commands
     await bot.process_commands(message)
