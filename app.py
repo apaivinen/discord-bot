@@ -3,6 +3,8 @@ from discord.ext import commands
 import os
 from fastapi import FastAPI
 import uvicorn
+import requests  # Added to handle HTTP requests
+import json
 
 # --- FastAPI web server ---
 app = FastAPI()
