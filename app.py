@@ -41,7 +41,7 @@ async def on_message(message):
 
         async with aiohttp.ClientSession() as session:
             try:
-                 async with session.get(url) as response:
+                async with session.get(url) as response:
                     if response.status == 200:
                         # Retrieve and decode the content
                         page_content = await response.text()
