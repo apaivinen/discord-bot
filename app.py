@@ -38,7 +38,7 @@ async def on_message(message):
         cleaned_message = message.content.replace(f"<@{bot.user.id}>", "").strip()
 
         # HTTP POST request to the specified endpoint
-        url = f"{os.getenv('API_URL')}"
+        url = "https://gamingbuddy-wiki-demo.swedencentral.inference.ml.azure.com/score"
         headers = {
             "Authorization": f"Bearer {os.getenv('API_AUTH_TOKEN')}",
             "Content-Type": "application/json"
